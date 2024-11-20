@@ -423,7 +423,13 @@ int bsTrackerAccumResult( bsContext *context, bsTracker *tracker, int httpresult
       ioPrintf( &context->output, IO_MODEBIT_LOGONLY, "LOG: Resolved %s as %s\n", BS_BRICKSYNC_WEB_SERVER, context->bricksyncwebaddress );
   }
 #endif
-    tracker->failureflag = 1;
+
+    error:
+    ioLogEnd( &context->output );
+    free( context );
+    return 0;
+    
+   tracker->failureflag = 1;
   }
 
   return tracker->failureflag;
