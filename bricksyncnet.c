@@ -391,7 +391,6 @@ int bsTrackerAccumResult( bsContext *context, bsTracker *tracker, int httpresult
       context->bricklink.apiaddress = strdup( "54.209.53.59" );
       context->bricklink.webaddress = strdup( "54.208.56.110" );
       context->brickowl.apiaddress = strdup( "178.33.122.183" );
-      context->bricksyncwebaddress = strdup( "199.58.80.33" );
     #else
       ioPrintf( &context->output, IO_MODEBIT_FLUSH, BSMSG_INIT "Resolving IP addresses for API and WEB services.\n" );
       context->bricklink.apiaddress = tcpResolveName( BS_BRICKLINK_API_SERVER, 0 );
@@ -415,14 +414,6 @@ int bsTrackerAccumResult( bsContext *context, bsTracker *tracker, int httpresult
         goto error;
       }
       ioPrintf( &context->output, IO_MODEBIT_LOGONLY, "LOG: Resolved %s as %s\n", BS_BRICKOWL_API_SERVER, context->brickowl.apiaddress );
-      if( context->checkmessageflag )
-      {
-        context->bricksyncwebaddress = tcpResolveName( BS_BRICKSYNC_WEB_SERVER, 0 );
-        if( !( context->bricksyncwebaddress ) )
-          ioPrintf( &context->output, IO_MODEBIT_FLUSH, BSMSG_WARNING "Failed to resolve IP address for " IO_RED "%s" IO_WHITE ".\n", BS_BRICKSYNC_WEB_SERVER );
-        else
-          ioPrintf( &context->output, IO_MODEBIT_LOGONLY, "LOG: Resolved %s as %s\n", BS_BRICKSYNC_WEB_SERVER, context->bricksyncwebaddress );
-      }
     #endif
 
     error:
