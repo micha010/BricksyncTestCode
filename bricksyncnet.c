@@ -387,43 +387,26 @@ int bsTrackerAccumResult( bsContext *context, bsTracker *tracker, int httpresult
     ioPrintf( &context->output, IO_MODEBIT_FLUSH, BSMSG_ERROR "Too many connection errors, giving up.\n" );
     
     /* Resolve IPs again after too many connection errors */
-    #if 0
-      context->bricklink.apiaddress = strdup( "54.209.53.59" );
-      context->bricklink.webaddress = strdup( "54.208.56.110" );
-      context->brickowl.apiaddress = strdup( "178.33.122.183" );
-    #else
-      ioPrintf( &context->output, IO_MODEBIT_FLUSH, BSMSG_INIT "Resolving IP addresses for API and WEB services.\n" );
-      context->bricklink.apiaddress = tcpResolveName( BS_BRICKLINK_API_SERVER, 0 );
-      if( !( context->bricklink.apiaddress ) )
-      {
-        ioPrintf( &context->output, IO_MODEBIT_FLUSH, BSMSG_ERROR "Failed to resolve IP address for " IO_RED "%s" IO_WHITE ".\n", BS_BRICKLINK_API_SERVER );
-        goto error;
-      }
+    ioPrintf( &context->output, IO_MODEBIT_FLUSH, BSMSG_INIT "Resolving IP addresses for API and WEB services.\n" );
+    context->bricklink.apiaddress = tcpResolveName( BS_BRICKLINK_API_SERVER, 0 );
+    if( !( context->bricklink.apiaddress ) )
+      ioPrintf( &context->output, IO_MODEBIT_FLUSH, BSMSG_ERROR "Failed to resolve IP address for " IO_RED "%s" IO_WHITE ".\n", BS_BRICKLINK_API_SERVER );
+    else
       ioPrintf( &context->output, IO_MODEBIT_LOGONLY, "LOG: Resolved %s as %s\n", BS_BRICKLINK_API_SERVER, context->bricklink.apiaddress );
-      context->bricklink.webaddress = tcpResolveName( BS_BRICKLINK_WEB_SERVER, 0 );
-      if( !( context->bricklink.webaddress ) )
-      {
-        ioPrintf( &context->output, IO_MODEBIT_FLUSH, BSMSG_ERROR "Failed to resolve IP address for " IO_RED "%s" IO_WHITE ".\n", BS_BRICKLINK_WEB_SERVER );
-        goto error;
-      }
+    context->bricklink.webaddress = tcpResolveName( BS_BRICKLINK_WEB_SERVER, 0 );
+    if( !( context->bricklink.webaddress ) )
+      ioPrintf( &context->output, IO_MODEBIT_FLUSH, BSMSG_ERROR "Failed to resolve IP address for " IO_RED "%s" IO_WHITE ".\n", BS_BRICKLINK_WEB_SERVER );
+    else
       ioPrintf( &context->output, IO_MODEBIT_LOGONLY, "LOG: Resolved %s as %s\n", BS_BRICKLINK_WEB_SERVER, context->bricklink.webaddress );
-      context->brickowl.apiaddress = tcpResolveName( BS_BRICKOWL_API_SERVER, 0 );
-      if( !( context->brickowl.apiaddress ) )
-      {
-        ioPrintf( &context->output, IO_MODEBIT_FLUSH, BSMSG_ERROR "Failed to resolve IP address for " IO_RED "%s" IO_WHITE ".\n", BS_BRICKOWL_API_SERVER );
-        goto error;
-      }
+    context->brickowl.apiaddress = tcpResolveName( BS_BRICKOWL_API_SERVER, 0 );
+    if( !( context->brickowl.apiaddress ) )
+      ioPrintf( &context->output, IO_MODEBIT_FLUSH, BSMSG_ERROR "Failed to resolve IP address for " IO_RED "%s" IO_WHITE ".\n", BS_BRICKOWL_API_SERVER );
+    else
       ioPrintf( &context->output, IO_MODEBIT_LOGONLY, "LOG: Resolved %s as %s\n", BS_BRICKOWL_API_SERVER, context->brickowl.apiaddress );
-    #endif
-
-    error:
-    ioLogEnd( &context->output );
-    free( context );
-    return 0;
     
     tracker->failureflag = 1;
   }
-
+  
   return tracker->failureflag;
 }
 
